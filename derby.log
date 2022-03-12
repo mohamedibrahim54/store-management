@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Sat Mar 12 02:31:15 EET 2022:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.15.2.0 - (1873585): instance a816c00e-017f-7b89-5e9e-0000065dc4d0 
+on database directory D:\My Work\eclipse-workspace\new-workspace\store-management\store with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@6f94fa3e 
+Loaded from file:/C:/Users/moibr/.m2/repository/org/apache/derby/derby/10.15.2.0/derby-10.15.2.0.jar
+java.vendor=Oracle Corporation
+java.runtime.version=17.0.2+8-LTS-86
+user.dir=D:\My Work\eclipse-workspace\new-workspace\store-management
+os.name=Windows 10
+os.arch=amd64
+os.version=10.0
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
