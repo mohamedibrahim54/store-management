@@ -3,11 +3,7 @@ package com.techmaker.storemanagement.model;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
@@ -24,6 +20,8 @@ public class Item {
 	private String name;
 	private BigDecimal sellingPrice;
 	private BigDecimal buyingPrice;
+	@Transient
+	private BigDecimal profit;
 	private int quantity;
 	@GenericField
 	@Temporal(TemporalType.DATE)
@@ -88,11 +86,14 @@ public class Item {
 		this.addedDate = addedDate;
 	}
 
+	public BigDecimal getProfit() {
+		return getSellingPrice().subtract(getBuyingPrice());
+	}
+
 	@Override
 	public String toString() {
 		return "Item [id=" + id + ", name=" + name + ", sellingPrice=" + sellingPrice + ", buyingPrice=" + buyingPrice
-				+ ", quantity=" + quantity + ", addedDate=" + addedDate + "]";
+				+ ", profit=" + getProfit() + ", quantity=" + quantity + ", addedDate=" + addedDate + "]";
 	}
-	
-	
+
 }

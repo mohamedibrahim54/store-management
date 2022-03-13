@@ -3,7 +3,12 @@ package com.techmaker.storemanagement;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Date;
+import java.util.List;
 
+import com.techmaker.storemanagement.service.PersistenceService;
+import com.techmaker.storemanagement.service.PersistenceServiceImpl;
+import com.techmaker.storemanagement.service.SearchService;
+import com.techmaker.storemanagement.service.SearchServiceImpl;
 import org.hibernate.Session;
 import org.hibernate.search.engine.search.query.SearchResult;
 import org.hibernate.search.mapper.orm.Search;
@@ -19,16 +24,7 @@ public class App {
 
 	public static void main(String[] args) {
 
-		Session session = HibernateUtil.getSessionFactory().openSession();
-		SearchSession searchSession = Search.session(session);
-
-		MassIndexer indexer = searchSession.massIndexer(Item.class).threadsToLoadObjects(7);
-
-		try {
-			indexer.startAndWait();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		HibernateUtil.buildSearchIndexes();
 
 		Item item1 = new Item("mobile phone", BigDecimal.valueOf(1000), BigDecimal.valueOf(900), 8,
 				Date.from(Instant.now()));
@@ -36,19 +32,19 @@ public class App {
 				Date.from(Instant.now()));
 		Item item3 = new Item("TV", BigDecimal.valueOf(500), BigDecimal.valueOf(450), 7,
 				Date.from(Instant.now()));
-		Repository repositoryImpl = new RepositoryImpl();
-		repositoryImpl.save(item1);
-		repositoryImpl.save(item2);
-		repositoryImpl.save(item3);
+		Repository repository = new RepositoryImpl();
+		PersistenceService persistenceService = new PersistenceServiceImpl(repository);
+		persistenceService.save(item1);
+		persistenceService.save(item2);
+		persistenceService.save(item3);
 
-		Item foundItem = repositoryImpl.findById(1);
+		Item foundItem = persistenceService.findById(1);
 		System.out.println(foundItem);
 
-		System.out.println("Search Reasult:");
-		SearchResult<Item> searchResult = searchSession.search(Item.class)
-				.where(i -> i.match().field("name").matching("Mobile")).fetch(20);
-
-		searchResult.hits().forEach(System.out::println);
+		SearchService searchService = new SearchServiceImpl();
+		List<Item> items = searchService.searchName("mob"+"*");
+		System.out.println("Search Result");
+		items.forEach(System.out::println);
 	}
 
 }
